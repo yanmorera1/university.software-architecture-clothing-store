@@ -95,7 +95,6 @@ namespace ClothingStore.Infrastructure.Migrations
                     Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Names = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RelatedProductId = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false)

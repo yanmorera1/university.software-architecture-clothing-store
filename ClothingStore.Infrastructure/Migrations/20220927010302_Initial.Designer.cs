@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClothingStore.Infrastructure.Migrations
 {
     [DbContext(typeof(ClothingStoreDbContext))]
-    [Migration("20220926234151_Initial")]
+    [Migration("20220927010302_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,9 +52,6 @@ namespace ClothingStore.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RelatedProductId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

@@ -7,7 +7,7 @@ namespace ClothingStore.Domain
         public string Message { get; set; }
         public string Email { get; set; }
         public string Names { get; set; }
-        public int RelatedProductId { get; set; }
+        public int ProductId { get; set; }
         public virtual Product Product { get; set; }
     }
 }
