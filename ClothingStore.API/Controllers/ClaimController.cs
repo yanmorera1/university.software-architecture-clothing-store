@@ -18,13 +18,13 @@ namespace ClothingStore.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ClaimVm>>> GetClaimByClientEmail(GetClaimByClientEmailQuery query)
+        public async Task<ActionResult<IEnumerable<ClaimVm>>> GetClaimByClientEmail([FromQuery] GetClaimByClientEmailQuery query)
         {
             return Ok(await _mediator.Send(query));
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> CreateClaim(CreateClaimCommand command)
+        public async Task<ActionResult<int>> CreateClaim([FromBody] CreateClaimCommand command)
         {
             return Ok(await _mediator.Send(command));
         }
