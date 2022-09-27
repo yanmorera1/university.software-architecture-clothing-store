@@ -20,9 +20,4 @@
     <ProjectReference Include="..\ClothingStore.Domain\ClothingStore.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Orders\Commands\CreateOrder\" />
-    <Folder Include="Features\Orders\Queries\GetOrderById\" />
-  </ItemGroup>
-
 </Project>

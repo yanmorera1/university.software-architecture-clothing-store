@@ -1,6 +1,8 @@
 using ClothingStore.API.Middlewares;
 using ClothingStore.Application;
 using ClothingStore.Infrastructure;
+using ClothingStore.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,5 +48,22 @@ app.UseAuthorization();
 app.UseCors("CorsPolicy");
 
 app.MapControllers();
+
+using (var scope = app.Services.CreateScope())
+{
+    var service = scope.ServiceProvider;
+    var loggerFactory = service.GetRequiredService<ILoggerFactory>();
+    try
+    {
+        var context = service.GetRequiredService<ClothingStoreDbContext>();
+        await context.Database.MigrateAsync();
+        await ClothingStoreDbContextSeed.SeedAsync(context, loggerFactory);
+    }
+    catch (Exception ex)
+    {
+        var logger = loggerFactory.CreateLogger<Program>();
+        logger.LogError(ex, "Migration error");
+    }
+}
 
 app.Run();
