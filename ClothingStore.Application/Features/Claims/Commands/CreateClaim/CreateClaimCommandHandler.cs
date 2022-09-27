@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ClothingStore.Application.Contracts.Persistence;
+using ClothingStore.Application.Contracts.Services;
 using ClothingStore.Domain;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -11,6 +12,7 @@ namespace ClothingStore.Application.Features.Claims.Commands.CreateClaim
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<CreateClaimCommandHandler> _logger;
         private readonly IMapper _mapper;
+        private readonly IEmailService _emailService;
 
         public CreateClaimCommandHandler(IUnitOfWork unitOfWork, ILogger<CreateClaimCommandHandler> logger, IMapper mapper)
         {
@@ -23,13 +25,16 @@ namespace ClothingStore.Application.Features.Claims.Commands.CreateClaim
         {
             var claim = _mapper.Map<Claim>(request);
             await _unitOfWork.Repository<Claim>().AddAsync(claim);
-            await SendEmailToAdmin();
+            var product = await _unitOfWork.Repository<Product>().GetByIdAsync(request.RelatedProductId);
+            await SendEmailToAdmin(product, request.Names ,request.Email, request.Message);
             return claim.Id;
         }
 
-        private async Task SendEmailToAdmin()
+        private async Task SendEmailToAdmin(Product product, string names, string email, string comment)
         {
-            throw new NotImplementedException();
+            var message = @$"Ha recibido un reclamo de {names} por el producto {product.Name} 
+                            con id {product.Id} con el comentario: {comment}";
+            await _emailService.SendEmailAsync(email, message);
         }
     }
 }
