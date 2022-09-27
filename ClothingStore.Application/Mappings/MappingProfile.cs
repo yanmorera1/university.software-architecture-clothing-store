@@ -17,6 +17,7 @@ namespace ClothingStore.Application.Mappings
 
             #region Queries
             CreateMap<Product, ProductVm>();
+            CreateMap<Claim, ClaimVm>();
             #endregion
         }
     }

@@ -14,27 +14,27 @@ namespace ClothingStore.Application.Features.Claims.Commands.CreateClaim
         private readonly IMapper _mapper;
         private readonly IEmailService _emailService;
 
-        public CreateClaimCommandHandler(IUnitOfWork unitOfWork, ILogger<CreateClaimCommandHandler> logger, IMapper mapper)
+        public CreateClaimCommandHandler(IUnitOfWork unitOfWork, ILogger<CreateClaimCommandHandler> logger, IMapper mapper, IEmailService emailService)
         {
             _unitOfWork = unitOfWork;
             _logger = logger;
             _mapper = mapper;
+            _emailService = emailService;
         }
 
         public async Task<int> Handle(CreateClaimCommand request, CancellationToken cancellationToken)
         {
             var claim = _mapper.Map<Claim>(request);
             await _unitOfWork.Repository<Claim>().AddAsync(claim);
-            var product = await _unitOfWork.Repository<Product>().GetByIdAsync(request.RelatedProductId);
-            await SendEmailToAdmin(product, request.Names ,request.Email, request.Message);
+            var product = await _unitOfWork.Repository<Product>().GetByIdAsync(request.ProductId);
+            await SendEmailToAdmin(claim.Id, product, request.Names ,request.Email, request.Message);
             return claim.Id;
         }
 
-        private async Task SendEmailToAdmin(Product product, string names, string email, string comment)
+        private async Task SendEmailToAdmin(int claimId, Product product, string names, string email, string comment)
         {
-            var message = @$"Ha recibido un reclamo de {names} por el producto {product.Name} 
-                            con id {product.Id} con el comentario: {comment}";
-            await _emailService.SendEmailAsync(email, message);
+            var message = @$"Ha recibido un reclamo de {names} por el producto {product.Name} con id {product.Id} con el comentario: {comment}";
+            await _emailService.SendEmailAsync(email, $"Reclamo #{claimId}", message);
         }
     }
 }
